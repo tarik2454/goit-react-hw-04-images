@@ -1,53 +1,48 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyledOverlay, StyledModalWindow } from './Modal.styled';
+import { createPortal } from 'react-dom';
 
-export class Modal extends Component {
-  state = {
-    currentImage: this.props.largeImageURL,
-  };
+const modalRoot = document.querySelector('#modal-root');
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
+export const Modal = ({ tags, currentImage, toggleModal }) => {
+  const [currentImageSrc, setCurrentImageSrc] = useState(currentImage);
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
+  useEffect(() => {
+    const handleKeyDown = event => {
+      if (event.key === 'Escape') {
+        toggleModal();
+      }
+    };
 
-  onBackdropClick = event => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [toggleModal]);
+
+  const onBackdropClick = event => {
     if (event.target === event.currentTarget) {
-      this.props.toggleModal();
+      toggleModal();
     }
   };
 
-  handleKeyDown = event => {
-    if (event.key === 'Escape') {
-      this.props.toggleModal();
-    }
+  const getBigImage = () => {
+    setCurrentImageSrc(currentImage);
   };
 
-  getBigImage = () => {
-    const { largeImageURL } = this.props;
-    this.setState({ currentImage: largeImageURL });
-  };
-
-  render() {
-    const { tags, currentImage } = this.props;
-
-    return (
-      <StyledOverlay onClick={this.onBackdropClick}>
-        <StyledModalWindow>
-          <img src={currentImage} alt={tags} onClick={this.getBigImage} />
-        </StyledModalWindow>
-      </StyledOverlay>
-    );
-  }
-}
+  return createPortal(
+    <StyledOverlay onClick={onBackdropClick}>
+      <StyledModalWindow>
+        <img src={currentImageSrc} alt={tags} onClick={getBigImage} />
+      </StyledModalWindow>
+    </StyledOverlay>,
+    modalRoot
+  );
+};
 
 Modal.propTypes = {
   tags: PropTypes.string.isRequired,
-  currentImage: PropTypes.string.isRequired,
-  largeImageURL: PropTypes.string.isRequired,
   toggleModal: PropTypes.func.isRequired,
 };
