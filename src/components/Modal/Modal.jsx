@@ -39,4 +39,5 @@ export const Modal = ({ tags, currentImage, toggleModal }) => {
 Modal.propTypes = {
   tags: PropTypes.string.isRequired,
   toggleModal: PropTypes.func.isRequired,
+  currentImage: PropTypes.string.isRequired,
 };
