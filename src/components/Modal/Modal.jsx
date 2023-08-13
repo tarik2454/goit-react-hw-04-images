@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { StyledOverlay, StyledModalWindow } from './Modal.styled';
 import { createPortal } from 'react-dom';
@@ -6,8 +6,6 @@ import { createPortal } from 'react-dom';
 const modalRoot = document.querySelector('#modal-root');
 
 export const Modal = ({ tags, currentImage, toggleModal }) => {
-  const [currentImageSrc, setCurrentImageSrc] = useState(currentImage);
-
   useEffect(() => {
     const handleKeyDown = event => {
       if (event.key === 'Escape') {
@@ -28,14 +26,10 @@ export const Modal = ({ tags, currentImage, toggleModal }) => {
     }
   };
 
-  const getBigImage = () => {
-    setCurrentImageSrc(currentImage);
-  };
-
   return createPortal(
     <StyledOverlay onClick={onBackdropClick}>
       <StyledModalWindow>
-        <img src={currentImageSrc} alt={tags} onClick={getBigImage} />
+        <img src={currentImage} alt={tags} />
       </StyledModalWindow>
     </StyledOverlay>,
     modalRoot
