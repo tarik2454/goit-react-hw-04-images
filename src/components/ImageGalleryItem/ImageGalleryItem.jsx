@@ -9,9 +9,9 @@ export const ImageGalleryItem = ({ images = [], toggleModal }) => {
 
   return (
     <>
-      {images.map(({ id, webformatURL, tags, largeImageURL }) => (
+      {images.map(({ id, webformatURL, tags, largeImageURL }, index) => (
         <StyledGalleryItem
-          key={id}
+          key={index}
           onClick={() => onImageClick(largeImageURL, tags)}
         >
           <StyledImageItem

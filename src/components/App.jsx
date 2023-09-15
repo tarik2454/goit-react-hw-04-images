@@ -42,9 +42,6 @@ export const App = () => {
         if ([...hits].length === totalHits) {
           toast.info(`End ${totalHits} images!`);
         }
-        // if ([...this.state.hits, ...hits].length === totalHits) {
-        //   toast.info(`End ${totalHits}!`);
-        // }
       } catch (error) {
         console.warn(error.message);
       } finally {
